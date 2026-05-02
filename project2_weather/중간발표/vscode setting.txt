@@ -1,0 +1,47 @@
+1. echo %COMSPEC%
+C:\Windows\System32\cmd.exe
+2. Ctrl + ,
+terminal.integrated.allowChords : true
+terminal.integrated.enablePersistentSessions : true
+terminal.integrated.minimumContrastRatio : 4.5
+terminal.integrated.gpuAcceleration : auto
+3. Color Theme 이름
+@id:vscode.theme-defaults Dark Modern
+4. python -c "import sys; print(sys.stderr.isatty())"
+True
+5. set | findstr PYTHON
+PYTHONSTARTUP=c:\Users\HIDDLE\AppData\Roaming\Code\User\workspaceStorage\0f2f087f81f7e8f46a0c4d31defc9123\ms-python.python\pythonrc.py
+PYTHON_BASIC_REPL=1
+set | findstr TERM
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.107.0
+COLORTERM=truecolor
+
+Get-ChildItem Env: | findstr PYTHON
+PYTHON_BASIC_REPL              1
+PYTHONSTARTUP                  c:\Users\HIDDLE\AppData\Roaming\Code\User\workspaceStorage\0f2f087f81f7e8f46a0c4d31defc9123\ms-python.python\pythonrc.py
+VSCODE_PYTHON_AUTOACTIVATE_... 1
+Get-ChildItem Env: | findstr TERM
+COLORTERM                      truecolor
+TERM_PROGRAM                   vscode
+TERM_PROGRAM_VERSION           1.107.0
+
+6. Extensions → Python v2025.20.0
+
+7. 
+Run Python File
+python insert.py
+결과 같음
+
+8.
+echo $PSVersionTable.PSVersion
+python -c "import sys; print(sys.stderr.isatty())"
+python -c "print('\x1b[31mRED TEST\x1b[0m')"
+python -c "import sys; print('stderr 출력', file=sys.stderr)"
+
+Major  Minor  Build  Revision
+-----  -----  -----  --------
+5      1      19041  6456
+True
+RED TEST(잘됨)
+stderr 출력(일반 텍스트)

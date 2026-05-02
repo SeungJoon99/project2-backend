@@ -1,0 +1,68 @@
+이름,타입,필수,설명
+sub_id,int,O,선택된 음식 카테고리
+lat,float,O,사용자 위도
+lon,float,O,사용자 경도
+distance,float,X,최대 거리 (km, default=1.0)
+top_n,int,X,추천 개수 (default=5)
+
+{
+  "count": 5,
+  "restaurants": [
+    {
+      "rest_id": 101,
+      "rest_name": "자매집 김치찌개",
+      "sub_id": 3,
+      "distance_km": 0.42,
+      "review_count": 347,
+      "positive_ratio": 0.81,
+      "final_score": 0.76
+    },
+    {
+      "rest_id": 88,
+      "rest_name": "전주명가",
+      "sub_id": 3,
+      "distance_km": 0.65,
+      "review_count": 210,
+      "positive_ratio": 0.79,
+      "final_score": 0.72
+    }
+  ]
+}
+
+필드	책임 레이어	설명
+rest_id	DB	음식점 PK
+rest_name	DB	음식점 이름
+sub_id	DB	음식 카테고리
+distance_km	Engine	사용자와의 거리
+review_count	DB	전체 리뷰 수
+positive_ratio	Service	베이지안 긍정 비율
+final_score	Engine	최종 추천 점수
+
+JSON Schema
+{
+  "type": "object",
+  "properties": {
+    "count": { "type": "integer" },
+    "restaurants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rest_id": { "type": "integer" },
+          "rest_name": { "type": "string" },
+          "sub_id": { "type": "integer" },
+          "distance_km": { "type": "number" },
+          "review_count": { "type": "integer" },
+          "positive_ratio": { "type": "number" },
+          "final_score": { "type": "number" }
+        },
+        "required": [
+          "rest_id",
+          "rest_name",
+          "distance_km",
+          "final_score"
+        ]
+      }
+    }
+  }
+}

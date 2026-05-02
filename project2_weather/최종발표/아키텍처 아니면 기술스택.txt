@@ -1,0 +1,16 @@
+
+mysql
+pymysql
+dbeaver
+python
+flask
+html
+css
+javascript
+jinja2
+request - response
+fetch
+git
+github
+github action
+VScode

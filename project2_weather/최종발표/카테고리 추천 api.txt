@@ -1,0 +1,34 @@
+GET /api/recommend/category        ← 날씨 → sub_id
+GET /api/recommend/restaurants     ← sub_id → 음식점 리스트
+
+이름,타입,필수,설명
+lat,float,O,사용자 위도
+lon,float,O,사용자 경도
+weather,string,O,날씨 코드 (rain, snow, clear 등)
+temp,float,X,기온 (선택)
+
+{
+  "weather": "rain",
+  "recommended_categories": [
+    {
+      "sub_id": 3,
+      "sub_name": "국물요리",
+      "score": 0.87
+    },
+    {
+      "sub_id": 7,
+      "sub_name": "한식",
+      "score": 0.72
+    },
+    {
+      "sub_id": 12,
+      "sub_name": "분식",
+      "score": 0.65
+    }
+  ]
+}
+
+필드	설명
+sub_id	음식 카테고리 PK
+sub_name	카테고리 이름
+score	날씨/군집 기반 적합도

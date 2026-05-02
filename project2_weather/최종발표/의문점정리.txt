@@ -1,0 +1,20 @@
+dao
+1 = 카테고리에 속한 음식점 목록
+리뷰 긍/부
+리뷰 수
+
+서비스
+받은 카테고리로 음식점목록 호출(dao.1)
+rest_df = self.rest_dao.select_by_category(sub_id)
+
+df['positive_ratio'] 계산
+
+reco_service.review_stat의 agg()와 감정값이 0,1이라 합계 간단하게
+
+review_dao.insert_reviews의 data for문의 _ , row와 df.iterrows()
+
+컷오프 후 결과 0이면 UI에서 “주변에 음식점이 없습니다” 처리
+
+리뷰 0개 가게의 처리 전략
+
+프론트에서 파라미터로 넘어온 인자 df나 json으로 변환(라우터단)
