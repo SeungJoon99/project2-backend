@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>근처 음식점 지도</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <style>
+        body { font-family: Arial; margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100%; }
+        .info { position: absolute; top: 10px; left: 10px; background: white; padding: 10px; z-index: 1000; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+<div class="info">
+    <b>📍 주변 음식점 보기</b><br>
+    지역: <span id="loc"></span>
+</div>
+<div id="map"></div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const loc = params.get("loc");
+document.getElementById("loc").textContent = loc;
+
+// 1) 지역 이름 → 좌표 변환 (Nominatim API 사용: 무료)
+async function geocode(location) {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${location}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return [data[0].lat, data[0].lon];
+}
+
+// 2) 근처 음식점 검색 (Overpass API)
+async function loadNearbyRestaurants(lat, lon) {
+    const query = `
+        [out:json];
+        node
+          ["amenity"="restaurant"]
+          (around:1500, ${lat}, ${lon});
+        out;
+    `;
+    const url = "https://overpass-api.de/api/interpreter";
+
+    const res = await fetch(url, {
+        method: "POST",
+        body: query
+    });
+    const data = await res.json();
+    return data.elements;
+}
+
+(async function init() {
+    const [lat, lon] = await geocode(loc);
+
+    // 지도 생성
+    const map = L.map('map').setView([lat, lon], 14);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+    // 지역 중심 마커
+    L.marker([lat, lon]).addTo(map).bindPopup("📍 중심 위치");
+
+    // 음식점 가져오기
+    const restaurants = await loadNearbyRestaurants(lat, lon);
+
+    restaurants.forEach(r => {
+        L.marker([r.lat, r.lon]).addTo(map)
+            .bindPopup(`🍽 ${r.tags.name || "이름 없음"}`);
+    });
+})();
+</script>
+
+</body>
+</html>

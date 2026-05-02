@@ -1,0 +1,17 @@
+naver_map_review_list
+네이버리뷰 크롤링
+
+k_means
+날씨 클러스터링 모델
+
+DFS_conv.py
+trans_lat_lng.html
+좌표 변환 모듈(위/경도 기상청좌표로 변환)
+
+
+weather_api1_요청_파싱_저장
+weather_api2_데이터가공
+기상청 api
+
+api_response.json
+기상청 api response.json (구조확인용)

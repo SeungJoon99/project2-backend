@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>날씨 정보 & 추천 음식</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .card { border: 1px solid #ddd; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 600px; }
+        .btn { padding: 12px; border: none; width: 100%; background: #2f80ed; color: white; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>📍 지역: <span id="loc"></span></h2>
+    <h3>🌤 현재 날씨</h3>
+    <p>기온: <span id="temp"></span>°C</p>
+    <p>구름: <span id="cloud"></span>%</p>
+    <p>강수량: <span id="rain"></span> mm</p>
+    <p>습도: <span id="humidity"></span>%</p>
+
+    <h3>🍜 추천 음식</h3>
+    <p id="food"></p>
+
+    <button class="btn" onclick="goMap()">근처 음식점 보러가기</button>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const loc = params.get("loc");
+document.getElementById("loc").textContent = loc;
+
+// 실제 API 호출 대신 "자리"를 만들어 둔다.
+async function loadWeather() {
+    // 여기에 OpenWeatherMap API 호출 가능
+    // 예: `https://api.openweathermap.org/data/2.5/weather?q=LOC&appid=YOUR_KEY&units=metric`
+
+    // 임시 데이터 (데모용)
+    const data = {
+        temp: 12,
+        cloud: 80,
+        rain: 2.5,
+        humidity: 60
+    };
+
+    document.getElementById("temp").textContent = data.temp;
+    document.getElementById("cloud").textContent = data.cloud;
+    document.getElementById("rain").textContent = data.rain;
+    document.getElementById("humidity").textContent = data.humidity;
+
+    // 추천 로직 (예시)
+    let food = "";
+    if (data.temp < 10) food = "따뜻한 국물 요리: 라멘, 우동, 설렁탕";
+    else if (data.rain > 1) food = "비 오는 날엔 파전 + 막걸리";
+    else if (data.cloud > 70) food = "조금 무거운 음식: 카레, 찜닭";
+    else food = "가벼운 음식: 샐러드, 초밥";
+
+    document.getElementById("food").textContent = food;
+}
+
+loadWeather();
+
+function goMap() {
+    window.location.href = "map.html?loc=" + encodeURIComponent(loc);
+}
+</script>
+
+</body>
+</html>

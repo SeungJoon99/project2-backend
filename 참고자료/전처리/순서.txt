@@ -1,0 +1,97 @@
+3. 범주형 처리 (One-hot)
+범주형 목록:
+
+광역시도명
+
+시군구명
+
+강수 유형명 (없음/비/눈/소나기...)
+
+바람강도 유형명 (약/보통/강)
+
+동쪽서쪽바람유형명 (east/west/none)
+
+풍향카테고리명 (N, NE, NW 등)
+
+👉 모두 one-hot 하면 됨.
+
+cat_cols = ["광역시도명", "시군구명", "강수 유형명",
+            "바람강도 유형명", "동쪽서쪽바람유형명",
+            "풍향카테고리명"]
+
+df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+
+or
+방법2: Label Encoding
+트리 모델 사용할 경우 가능.
+
+4. 풍향값 처리
+
+풍향값 = 0~360도 숫자 ⇒ 그대로 사용 가능.
+
+
+5. 연속형(수치형) 컬럼 그대로 사용
+
+습도값
+
+강수량 값
+
+기온값
+
+풍속값
+
+필요하면 StandardScaler 적용 가능.
+
+
+6. 타겟 변수 정의
+
+배달건수가 여러 개라서 목적에 따라 선택해야 함.
+
+예:
+✔ "치킨 배달건수" 예측
+✔ "전체 배달건수" 예측 → sum으로 생성
+
+df["total_order"] = (
+    df["한식_배달건수"] +
+    df["분식_배달건수"] +
+    ...
+)
+
+
+7. "없음" 값 처리
+
+강수 유형명에 있는 “없음”은 → 결측 아님 → 그냥 하나의 카테고리
+바람 방향의 "none"도 마찬가지로 카테고리로 처리하면 됨.
+
+👉 절대 NaN 처리하면 안 됨.
+
+
+import pandas as pd
+
+df = pd.read_csv("data.csv")
+
+# 날짜 처리
+df["날짜"] = pd.to_datetime(df["날짜"])
+df["year"] = df["날짜"].dt.year
+df["month"] = df["날짜"].dt.month
+df["day"] = df["날짜"].dt.day
+df["weekday"] = df["날짜"].dt.weekday
+df["is_weekend"] = df["weekday"] >= 5
+
+# 범주형 원핫
+cat_cols = [
+    "광역시도명", "시군구명", "강수 유형명",
+    "바람강도 유형명", "동쪽서쪽바람유형명",
+    "풍향카테고리명"
+]
+
+df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+
+# 필요 없는 컬럼 삭제
+df = df.drop(columns=["날짜"])
+
+df.head()
+
+
+이 데이터는 날씨 → 배달량 관계 분석/예측에 매우 적합한 형태라
+전처리만 잘 하면 바로 RandomForest, XGBoost, LSTM 등 모두 적용됨.

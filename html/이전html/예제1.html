@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>날씨 기반 음식 추천</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        input, button { padding: 10px; width: 100%; margin: 10px 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🍽 날씨 기반 음식 추천 시스템</h1>
+    <p>현재 위치 또는 원하는 지역 이름을 입력하세요.</p>
+
+    <input id="locationInput" placeholder="예: 서울, 부산, Tokyo, New York">
+    <button onclick="goWeather()">날씨 확인하기</button>
+</div>
+
+<script>
+function goWeather() {
+    const location = document.getElementById("locationInput").value;
+    if (!location) { alert("지역을 입력하세요!"); return; }
+
+    window.location.href = "weather.html?loc=" + encodeURIComponent(location);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+바이트코드
+b'{
+    "response": {
+        "header": {
+            "resultCode": "00",
+            "resultMsg": "NORMAL_SERVICE"
+        },
+        "body": {
+            "dataType": "JSON",
+            "items": {
+                "item": [
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "PTY",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "0",
+                        "baseDate": "20251121"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "REH",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "35"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "RN1",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "0"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "T1H",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "8.9"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "UUU",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "0.8"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "VEC",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "207"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "VVV",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "1.6"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "WSD",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "1.8"
+                    }
+                ]
+            },
+            "pageNo": 1,
+            "numOfRows": 1000,
+            "totalCount": 8
+        }
+    }
+}'
+{
+    "response": {
+        "header": {
+            "resultCode": "00",
+            "resultMsg": "NORMAL_SERVICE"
+        },
+        "body": {
+            "dataType": "JSON",
+            "items": {
+                "item": [
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "PTY",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "0"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "REH",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "35"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "RN1",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "0"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "T1H",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "8.9"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "UUU",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "0.8"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "VEC",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "207"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "VVV",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "1.6"
+                    },
+                    {
+                        "baseDate": "20251121",
+                        "baseTime": "1000",
+                        "category": "WSD",
+                        "nx": 55,
+                        "ny": 127,
+                        "obsrValue": "1.8"
+                    }
+                ]
+            },
+            "pageNo": 1,
+            "numOfRows": 1000,
+            "totalCount": 8
+        }
+    }
+}
+{'response': {'header': {'resultCode': '00', 'resultMsg': 'NORMAL_SERVICE'
+        }, 'body': {'dataType': 'JSON', 'items': {'item': [
+                    {'baseDate': '20251121', 'baseTime': '1000', 'category: 'JSON', 'items': {'item': [
+                                {'baseDate': '20251121', 'baseTime': '1000', 'category': 'PTY', 'nxcategory': 'REH', 'nx': 55, 'ny': 127, 'obsrValue': '35'
+                                },
+                                {'baseDate': '20251121',': 55, 'ny': 127, 'obsrValue': '0'
+                                },
+                                {'baseDate': '20251121', 'baseTime': '1000', 'category': 'R251121', 'baseTime': '1000', 'category': 'T1H', 'nx': 55, 'ny': 127, 'obsrValue': 'EH', 'nx': 55, 'ny': 127, 'obsrValue': '35'
+                                },
+                                {'baseDate': '20251121', 'baseTime': '1000', 'caterValue': '0.8'
+                                },
+                                {'baseDate': '20251121', 'baseTime': '1000', 'category': 'VEC', 'ngory': 'RN1', 'nx': 55, 'ny': 127, 'obsrValue': '0'
+                                },
+                                {'baseDate': '20251121', 'baseTime': '1000 'VVV', 'nx': 55, 'ny': 127, 'obsrValue': '1.6'
+                                },
+                                {'baseDate': '20251121', 'baseTim', 'category': 'T1H', 'nx': 55, 'ny': 127, 'obsrValue': '8.9'
+                                },
+                                {'baseDate': '20251121', 'baseTiws': 1000, 'totalCount': 8
+                                }
+                            }
+                        }me': '1000', 'category': 'UUU', 'nx': 55, 'ny': 127, 'obsrValue': '0.8'
+                    },
+                    {'baseDate': '20251121', 'baseTime': '1000', 'category': 'VEC', 'nx': 55, 'ny': 127, 'obsrValue': '207'
+                    },
+                    {'baseDate': 'baseTime': '1000', 'category': 'RN1', 'nx': 55, 'ny': 127, 'obsrValue': '0'
+                    },
+                    {'baseDate': '20251121', 'baseTime': '1000', 'category': 'T1H', 'nx': 55, 'ny': 127, 'obsrValue': '8.9'
+                    },
+                    {'baseDate': '20251121', 'baseTime': '1000', 'category': 'UUU', 'nx': 55, 'ny': 127, 'obsrValue': '0.8'
+                    },
+                    {'baseDate': '20251121', 'baseTime': '1000', 'category': 'VEC', 'nx': 55, 'ny': 127, 'obsrValue': '207'
+                    },
+                    {'baseDate': '20251121', 'baseTime': '1000', 'category': 'VVV', 'nx': 55, 'ny': 127, 'obsrValue': '1.6'
+                    },
+                    {'baseDate': '20251121', 'baseTime': '1000', 'category': 'WSD', 'nx': 55, 'ny': 127, 'obsrValue': '1.8'
+                    }
+                ]
+            }, 'pageNo': 1, 'numOfRows': 1000, 'totalCount': 8
+        }
+    }
+}
+
+
+
+바이트응답 :
+b'{
+    "response": {
+        "header": {
+            "resultCode": "10",
+            "resultMsg":"\xec\xb5\x9c\xea\xb7\xbc 1\xec\x9d\xbc \xea\xb0\x84\xec\x9d\x98 \xec\x9e\x90\xeb\xa3\x8c\xeb\xa7\x8c \xec\xa0\x9c\xea\xb3\xb5\xed\x95\xa9\xeb\x8b\x88\xeb\x8b\xa4."
+        }
+    }
+}'
+서버인코딩 :
+{
+    "response": {
+        "header": {
+            "resultCode": "10",
+            "resultMsg": "최근 1일 간의 자료만 제공합니다."
+        }
+    }
+}
+json변환 :
+{'response': {'header': {'resultCode': '10', 'resultMsg': '최근 1일 간의 자료만 제공합니다.'
+        }
+    }
+}
+
+바이트응답 :
+b'<?xml version="1.0" encoding="UTF-8"?>\r\n<response><header><resultCode>10</resultCode><resultMsg>\xec\xb5\x9c\xea\xb7\xbc 1\xec\x9d\xbc \xea\xb0\x84\xec\x9d\x98 \xec\x9e\x90\xeb\xa3\x8c\xeb\xa7\x8c \xec\xa0\x9c\xea\xb3\xb5\xed\x95\xa9\xeb\x8b\x88\xeb\x8b\xa4.</resultMsg></header></response>\r\n'
+서버인코딩 :
+<?xml version="1.0" encoding="UTF-8"?>
+<response><header><resultCode>10</resultCode><resultMsg>최근 1일 간의 자료만 제공합니다.</resultMsg></header></response>
+
