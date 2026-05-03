@@ -32,8 +32,14 @@ def index():
     return render_template('map.html', kakao_key=KAKAO_MAP_KEY)
 
 if __name__ == '__main__':
-    print("서버 가동 준비 완료!")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Render에서 제공하는 PORT 환경 변수를 읽어오고, 없으면 10000을 기본값으로 사용
+    port = int(os.environ.get("PORT", 10000))
+    
+    print(f"서버 가동 준비 완료! (Port: {port})")
+    
+    # 배포 환경에서는 debug=True를 끄는 것이 좋지만, 
+    # 일단 에러 확인을 위해 유지한다면 host와 port 설정을 아래처럼 바꿔야 해.
+    app.run(host='0.0.0.0', port=port)
 
 
 
