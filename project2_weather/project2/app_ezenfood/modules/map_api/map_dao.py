@@ -3,10 +3,11 @@ import os
 
 class MapDAO:
     def __init__(self):
-        db_host = os.environ.get('DB_HOST', '127.0.0.1')
-        db_port = int(os.environ.get('DB_PORT', 3306))
-        db_user = os.environ.get('DB_USER', 'root')
-        db_password = os.environ.get('DB_PASSWORD', 'ezen')
+        # 이미지에 있는 Aiven DB 정보 그대로 입력
+        db_host = os.environ.get('DB_HOST', 'mysql-3f8fbca3-ezeneats-db.l.aivencloud.com')
+        db_port = int(os.environ.get('DB_PORT', 20358)) # 여기 3306 말고 20358로 수정
+        db_user = os.environ.get('DB_USER', 'avnadmin')
+        db_password = os.environ.get('DB_PASSWORD', 'AVNS_KkNjBuyeGfrmKzYfvK6')
         db_name = os.environ.get('DB_NAME', 'defaultdb')
 
         try:
@@ -17,7 +18,7 @@ class MapDAO:
                 password=db_password,
                 database=db_name,
                 charset="utf8mb4"
-            )
+            )   
             self.cursor = self.conn.cursor(dictionary=True)
         except Exception as e:
             print(f"[ERROR] DB Connection Failed: {e}")
@@ -69,7 +70,7 @@ class MapDAO:
             print(f"[ERROR] search_restaurants_by_name 실패:", e)
             return []
 
-    def _calculate_distance(self, lat1, lon1, lat2, lon2):
+    def _calculate_distance(self, lat1, lon1, lat2, lon2):  
         from math import sin, cos, sqrt, atan2, radians
         try:
             R = 6371
