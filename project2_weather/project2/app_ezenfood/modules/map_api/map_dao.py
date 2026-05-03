@@ -3,26 +3,38 @@ import os
 
 class MapDAO:
     def __init__(self):
-        # 이미지에 있는 Aiven DB 정보 그대로 입력
-        db_host = os.environ.get('DB_HOST', 'mysql-3f8fbca3-ezeneats-db.l.aivencloud.com')
-        db_port = int(os.environ.get('DB_PORT', 20358)) # 여기 3306 말고 20358로 수정
-        db_user = os.environ.get('DB_USER', 'avnadmin')
-        db_password = os.environ.get('DB_PASSWORD', 'AVNS_KkNjBuyeGfrmKzYfvK6')
-        db_name = os.environ.get('DB_NAME', 'defaultdb')
+        # 환경변수에서 가져오기 (기본값 제거)
+        db_host = os.environ.get('DB_HOST')
+        db_port = os.environ.get('DB_PORT')
+        db_user = os.environ.get('DB_USER')
+        db_password = os.environ.get('DB_PASSWORD')
+        db_name = os.environ.get('DB_NAME')
+
+        if not all([db_host, db_port, db_user, db_password, db_name]):
+            raise ValueError(f"DB 환경변수가 누락되었습니다: "
+                           f"HOST={bool(db_host)}, PORT={bool(db_port)}, "
+                           f"USER={bool(db_user)}, PASS={bool(db_password)}, NAME={bool(db_name)}")
 
         try:
             self.conn = mysql.connector.connect(
                 host=db_host,
-                port=db_port,
+                port=int(db_port),
                 user=db_user,
                 password=db_password,
                 database=db_name,
-                charset="utf8mb4"
-            )   
+                charset="utf8mb4",
+                connection_timeout=20,
+                # Aiven은 SSL을 사용하므로 아래 옵션 추가 추천
+                ssl_disabled=False
+            )
             self.cursor = self.conn.cursor(dictionary=True)
+            print(f"[SUCCESS] Aiven DB 연결 완료 → {db_host}:{db_port}")
+            
         except Exception as e:
-            print(f"[ERROR] DB Connection Failed: {e}")
+            print(f"[CRITICAL] DB 연결 실패: {e}")
             raise e
+
+    # 나머지 메서드들 (fetch_restaurants, search_restaurants_by_name, _calculate_distance)은 그대로 유지
 
     def fetch_restaurants(self, lat, lon, food_sort=None, limit=30):
         sql = """
