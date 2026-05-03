@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>날씨 기반 음식 추천 & 지도</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+    body { font-family: Arial; margin:0; padding:20px; }
+    .container { max-width: 800px; margin:auto; }
+    input, button { padding:10px; margin-top:10px; width:100%; }
+    #map { height: 400px; width:100%; margin-top:20px; }
+    .card { padding:15px; border:1px solid #ddd; border-radius:8px; margin-top:20px; }
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h2>🍽 날씨 기반 음식 추천 + 주변 식당 지도</h2>
+
+    <input id="locationInput" placeholder="예: 서울, 부산, Tokyo">
+    <button onclick="loadAll()">조회하기</button>
+
+    <div id="weatherBox" class="card" style="display:none;">
+        <h3>🌤 날씨 정보</h3>
+        기온: <span id="temp"></span>°C<br>
+        구름: <span id="cloud"></span>% <br>
+        강수량: <span id="rain"></span> mm <br>
+        습도: <span id="humidity"></span>% 
+    </div>
+
+    <div id="foodBox" class="card" style="display:none;">
+        <h3>🍜 추천 음식</h3>
+        <p id="recommendedFood"></p>
+    </div>
+
+    <div id="mapBox" style="display:none;">
+        <h3>📍 주변 음식점 지도</h3>
+        <div id="map"></div>
+    </div>
+</div>
+
+<script>
+let map;
+
+// 1) 위치 → 좌표 변환
+async function geocode(loc) {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${loc}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.length) throw "좌표를 찾을 수 없습니다.";
+    return [data[0].lat, data[0].lon];
+}
+
+// 2) 날씨 조회 (OpenWeather API 자리)
+async function loadWeather(lat, lon) {
+    // 실제로는 API 키 필요 – 데모 데이터 사용
+    return {
+        temp: 13,
+        cloud: 70,
+        rain: 0,
+        humidity: 55
+    };
+}
+
+// 3) 추천 음식 로직
+function recommendFood(w) {
+    if (w.temp < 10) return "따뜻한 국물 요리: 라멘, 전골, 설렁탕";
+    if (w.rain > 1) return "비 오는 날 파전 + 막걸리!";
+    if (w.cloud > 60) return "든든한 음식: 카레라이스, 찜닭";
+    return "가벼운 음식: 초밥, 샐러드";
+}
+
+// 4) 주변 음식점 검색
+async function loadRestaurants(lat, lon) {
+    const query = `
+        [out:json];
+        node["amenity"="restaurant"](around:1500, ${lat}, ${lon});
+        out;`;
+    const res = await fetch("https://overpass-api.de/api/interpreter", { method:"POST", body:query });
+    const data = await res.json();
+    return data.elements;
+}
+
+// 5) 지도 생성 + 음식점 표시
+function renderMap(lat, lon, restaurants) {
+    if (!map) {
+        map = L.map('map').setView([lat, lon], 14);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    } else {
+        map.setView([lat, lon], 14);
+    }
+
+    L.marker([lat, lon]).addTo(map).bindPopup("기준 위치");
+
+    restaurants.forEach(r => {
+        L.marker([r.lat, r.lon]).addTo(map)
+            .bindPopup(r.tags.name || "이름 없음");
+    });
+}
+
+// 전체 로딩 시작
+async function loadAll() {
+    try {
+        const loc = document.getElementById("locationInput").value;
+        if (!loc) return alert("지역을 입력하세요.");
+
+        const [lat, lon] = await geocode(loc);
+        const weather = await loadWeather(lat, lon);
+
+        document.getElementById("temp").textContent = weather.temp;
+        document.getElementById("cloud").textContent = weather.cloud;
+        document.getElementById("rain").textContent = weather.rain;
+        document.getElementById("humidity").textContent = weather.humidity;
+        document.getElementById("weatherBox").style.display = "block";
+
+        const recommended = recommendFood(weather);
+        document.getElementById("recommendedFood").textContent = recommended;
+        document.getElementById("foodBox").style.display = "block";
+
+        const restaurants = await loadRestaurants(lat, lon);
+        renderMap(lat, lon, restaurants);
+
+        document.getElementById("mapBox").style.display = "block";
+
+    } catch(e) {
+        alert("에러: " + e);
+    }
+}
+</script>
+</body>
+</html>

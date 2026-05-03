@@ -1,0 +1,4 @@
+anaconda3
+vscode extension, library
+git
+dbeaver, dbdump

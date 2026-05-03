@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>날씨 기반 음식 추천 & 지도 (SPA)</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial; }
+
+    /* 전체 레이아웃 */
+    .layout {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    /* 좌측 패널 */
+    .sidebar {
+        width: 350px;
+        background: #f5f5f7;
+        padding: 20px;
+        border-right: 1px solid #ddd;
+        overflow-y: auto;
+    }
+
+    .sidebar h2 { margin-top:0; }
+
+    input, button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+    }
+
+    button {
+        background: #2f80ed;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    button:hover { background: #1d5fcc; }
+
+    .card {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-top: 20px;
+    }
+
+    .title-small {
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    /* 우측 지도 */
+    #map {
+        flex-grow: 1;
+        height: 100vh;
+    }
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+    <!-- 왼쪽 패널 -->
+    <div class="sidebar">
+        <h2>🍽 날씨 기반 음식 추천</h2>
+
+        <input id="locationInput" placeholder="예: 서울, 부산, New York">
+        <button onclick="loadAll()">조회하기</button>
+
+        <div id="weatherCard" class="card" style="display:none;">
+            <div class="title-small">🌤 현재 날씨</div>
+            기온: <span id="temp"></span>°C<br>
+            구름: <span id="cloud"></span>%<br>
+            강수량: <span id="rain"></span> mm<br>
+            습도: <span id="humidity"></span>%<br>
+        </div>
+
+        <div id="foodCard" class="card" style="display:none;">
+            <div class="title-small">🍜 추천 음식</div>
+            <p id="foodText"></p>
+        </div>
+
+        <div id="listCard" class="card" style="display:none;">
+            <div class="title-small">🍽 주변 음식점</div>
+            <ul id="foodList"></ul>
+        </div>
+    </div>
+
+    <!-- 오른쪽 지도 영역 -->
+    <div id="map"></div>
+
+</div>
+
+<!-- JS 영역 -->
+
+<script>
+let map;
+let markers = [];
+
+/* -----------------------------
+   1) 지역 이름 → 좌표 변환
+--------------------------------*/
+async function geocode(location) {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${location}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.length) throw "해당 지역의 좌표를 찾을 수 없습니다.";
+    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+}
+
+/* -----------------------------
+   2) 날씨 API (데모 데이터)
+   실제 API 사용 원하면 만들어줌
+--------------------------------*/
+async function loadWeather(lat, lon) {
+    return {
+        temp: 15,
+        cloud: 60,
+        rain: 0,
+        humidity: 55
+    };
+}
+
+/* -----------------------------
+   3) 추천 음식 로직
+--------------------------------*/
+function recommendFood(w) {
+    if (w.temp < 10) return "따뜻한 국물 요리: 전골, 라멘, 우동";
+    if (w.rain > 1) return "비 오는 날엔 파전 + 막걸리!";
+    if (w.cloud > 70) return "든든한 음식: 카레, 찜닭";
+    return "가볍고 산뜻한 음식: 초밥, 샐러드";
+}
+
+/* -----------------------------
+   4) 주변 음식점 (Overpass API)
+--------------------------------*/
+async function loadRestaurants(lat, lon) {
+    const query = `
+        [out:json];
+        node["amenity"="restaurant"](around:1500, ${lat}, ${lon});
+        out;
+    `;
+    const res = await fetch("https://overpass-api.de/api/interpreter", {
+        method: "POST",
+        body: query
+    });
+    const data = await res.json();
+    return data.elements;
+}
+
+/* -----------------------------
+   5) 지도 셋업 + 마커 표시
+--------------------------------*/
+function renderMap(lat, lon, restaurants) {
+    // 초기 1회 생성
+    if (!map) {
+        map = L.map('map').setView([lat, lon], 14);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    } else {
+        map.setView([lat, lon], 14);
+    }
+
+    // 기존 마커 제거
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+
+    // 기준점 마커
+    const baseMarker = L.marker([lat, lon]).addTo(map).bindPopup("기준 위치");
+    markers.push(baseMarker);
+
+    // 음식점 마커
+    restaurants.forEach(r => {
+        const marker = L.marker([r.lat, r.lon]).addTo(map)
+            .bindPopup(r.tags.name || "이름 없음");
+        markers.push(marker);
+    });
+}
+
+/* -----------------------------
+   6) 전체 프로세스 실행
+--------------------------------*/
+async function loadAll() {
+    try {
+        const loc = document.getElementById("locationInput").value;
+        if (!loc) return alert("지역을 입력하세요!");
+
+        const [lat, lon] = await geocode(loc);
+        const weather = await loadWeather(lat, lon);
+
+        // 날씨 표시
+        document.getElementById("temp").textContent = weather.temp;
+        document.getElementById("cloud").textContent = weather.cloud;
+        document.getElementById("rain").textContent = weather.rain;
+        document.getElementById("humidity").textContent = weather.humidity;
+        document.getElementById("weatherCard").style.display = "block";
+
+        // 음식 추천
+        const food = recommendFood(weather);
+        document.getElementById("foodText").textContent = food;
+        document.getElementById("foodCard").style.display = "block";
+
+        // 음식점 검색
+        const restaurants = await loadRestaurants(lat, lon);
+
+        // 리스트 표시
+        const ul = document.getElementById("foodList");
+        ul.innerHTML = "";
+        restaurants.forEach(r => {
+            const name = r.tags.name || "이름 없음";
+            ul.innerHTML += `<li>${name}</li>`;
+        });
+        document.getElementById("listCard").style.display = "block";
+
+        // 지도 표시
+        renderMap(lat, lon, restaurants);
+
+    } catch (e) {
+        alert("오류: " + e);
+    }
+}
+</script>
+</body>
+</html>

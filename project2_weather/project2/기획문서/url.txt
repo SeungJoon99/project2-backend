@@ -1,0 +1,25 @@
+
+#홈
+@app.route("/", methods=["GET POST"])
+ #지도
+
+
+#검색
+/search/<keyword>
+
+#카테고리 선택
+/<category>
+/restaurants/<category>
+/restaurants/<category>/<location>
+/restaurants?category=<category>&price=<price>&rating=<rating>
+
+#음식점 선택
+/<category>/<restaurant>
+@app.route('/restaurants/<int:restaurant_id>', methods=['GET'])
+
+
+
+
+#날씨
+
+#

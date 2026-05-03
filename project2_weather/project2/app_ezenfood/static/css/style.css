@@ -1,0 +1,289 @@
+@charset "utf-8";
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Arial', sans-serif; background: #f0f2f5; }
+
+
+.layout { display: flex; height: 100vh; width: 100vw; }
+
+.sidebar {
+    width: 360px;
+    background: linear-gradient(to bottom, #f5f5f7, #e0e0e5);
+    padding: 25px;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+}
+.sidebar h2 {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    gap: 10px;
+}
+input, button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    outline: none;
+}
+input:focus { border-color: #2f80ed; box-shadow: 0 0 5px rgba(47,128,237,0.5); }
+
+button {
+    background: #2f80ed;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.1s;
+}
+button:hover {
+    background: #1d5fcc;
+    transform: translateY(-2px);
+}
+
+.card {
+    background: linear-gradient(145deg, #ffffff, #f0f0f3);
+    padding: 20px;
+    border-radius: 15px;
+    border: none;
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.title-small {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+#map {
+    flex-grow: 1;
+    height: 100vh;
+    border-radius: 15px 0 0 15px;
+    overflow: hidden;
+}
+
+.weather-card {
+    background: linear-gradient(135deg, #89CFF0, #4682B4);
+    padding: 25px;
+    border-radius: 20px;
+    color: white;
+    margin-top: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.weather-card h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.weather-main .temp {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.weather-icon {
+    width: 80px;
+    height: 80px;
+}
+
+.weather-details {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.weather-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+}
+
+.weather-detail span:first-child {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.weather-bg-icon {
+    position: absolute;
+    right: -30px;
+    top: -30px;
+    width: 150px;
+    opacity: 0.2;
+}
+body {
+    background: #e5e7eb; /* 전체 배경 톤 */
+}
+
+.sidebar {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.sidebar h2 {
+    font-size: 26px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+input, button {
+    font-size: 16px;
+}
+
+button {
+    background: linear-gradient(90deg, #4f46e5, #3b82f6);
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #3b82f6, #4f46e5);
+}
+
+.weather-card {
+    background: linear-gradient(135deg, #67e8f9, #0ea5e9);
+    color: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.weather-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.weather-main .temp {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.weather-icon {
+    width: 80px;
+    height: 80px;
+}
+
+.weather-details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.weather-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.weather-detail span:first-child {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+#foodList {
+    list-style: none;
+    padding-left: 0;
+}
+
+#foodList li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+#map {
+    border-radius: 15px 0 0 15px;
+    overflow: hidden;
+}
+
+/* 플로팅 패널 전체 */
+.floating-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 200px;
+    max-height: 200px;       /* 높이 제한 후 스크롤 가능 */
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px 10px 10px 10px; /* 닫기 버튼 공간 확보 */
+    z-index: 9999;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+
+/* 닫기 버튼 */
+.floating-panel .close-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    background: #ff4d4f;
+    color: white;
+    font-size: 14px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    line-height: 18px;
+    padding: 0;
+    z-index: 1000;
+}
+.floating-panel .close-btn:hover {
+    background: #e60000;
+}
+
+/* 음식 아이템 */
+.floating-panel .food-item {
+    font-size: 12px;
+    padding: 5px 8px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.floating-panel .food-item:last-child {
+    border-bottom: none;
+}
+.floating-panel .food-item:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+}

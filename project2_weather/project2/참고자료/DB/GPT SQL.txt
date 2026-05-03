@@ -1,0 +1,96 @@
+-- 음식 카테고리 테이블
+CREATE TABLE sub_category (
+    sub_id INT NOT NULL AUTO_INCREMENT,           -- 카테고리 아이디
+    sub_name VARCHAR(255) DEFAULT NULL,           -- 카테고리 이름
+    sub_sentence TEXT DEFAULT NULL,               -- 카테고리 문장
+    sub_keyword VARCHAR(255) DEFAULT NULL,        -- 카테고리 키워드
+    sub_embedding JSON DEFAULT NULL,              -- 카테고리 문장 벡터
+    PRIMARY KEY (sub_id)
+);
+
+-- 사용자 카테고리 로그 테이블
+CREATE TABLE sub_log (
+    sub_log_id INT NOT NULL AUTO_INCREMENT,       -- 카테고리 로그 아이디
+    sub_id INT NOT NULL,                          -- 카테고리 아이디 (외래키)
+    log_date DATETIME DEFAULT NOW(),              -- 기록일시
+    log_x DOUBLE NOT NULL,                        -- 사용자 경도
+    log_y DOUBLE NOT NULL,                        -- 사용자 위도
+    PRIMARY KEY (sub_log_id),
+    FOREIGN KEY (sub_id) REFERENCES sub_category(sub_id)
+);
+
+-- 사용자 로그 테이블
+CREATE TABLE log (
+    log_id INT NOT NULL AUTO_INCREMENT,           -- 로그 아이디
+    log_agreed VARCHAR(2) NOT NULL,               -- 위치 정보 동의 여부
+    log_query VARCHAR(255) DEFAULT NULL,          -- 검색어
+    log_user_ip VARCHAR(255) DEFAULT NULL,        -- 사용자 IP
+    log_x DOUBLE NOT NULL,                        -- 사용자 경도
+    log_y DOUBLE NOT NULL,                        -- 사용자 위도
+    log_weather JSON NOT NULL,                    -- 날씨 정보
+    PRIMARY KEY (log_id)
+);
+
+-- 리뷰 테이블
+CREATE TABLE review (
+    review_id INT NOT NULL AUTO_INCREMENT,        -- 리뷰 아이디
+    rest_id INT NOT NULL,                         -- 음식점 아이디 (외래키)
+    review_content TEXT NOT NULL,                 -- 리뷰 내용
+    review_date DATE NOT NULL,                    -- 리뷰 작성일
+    review_tokens TEXT DEFAULT NULL,              -- 리뷰 토큰
+    review_emotion VARCHAR(2) DEFAULT NULL,       -- 리뷰 감정
+    review_prob DOUBLE DEFAULT NULL,              -- 리뷰 확률
+    PRIMARY KEY (review_id),
+    FOREIGN KEY (rest_id) REFERENCES rest(rest_id)
+);
+
+-- 음식점 테이블
+CREATE TABLE rest (
+    rest_id INT NOT NULL AUTO_INCREMENT,          -- 음식점 아이디
+    sub_id INT NOT NULL,                          -- 카테고리 아이디 (외래키)
+    rest_name VARCHAR(255) NOT NULL,              -- 음식점 이름
+    rest_x DOUBLE NOT NULL,                       -- 음식점 경도
+    rest_y DOUBLE NOT NULL,                       -- 음식점 위도
+    rest_dong VARCHAR(255) DEFAULT NULL,          -- 법정동명
+    rest_addr VARCHAR(255) DEFAULT NULL,          -- 도로명주소
+    review_count INT NOT NULL DEFAULT 0,          -- 전체 리뷰 수
+    rest_cdate DATETIME DEFAULT NOW(),           -- 등록일자
+    rest_update DATETIME DEFAULT NOW(),          -- 수정일자
+    PRIMARY KEY (rest_id),
+    FOREIGN KEY (sub_id) REFERENCES sub_category(sub_id)
+);
+
+-- 사용자 음식점 로그 테이블
+CREATE TABLE rest_log (
+    rest_log_id INT NOT NULL AUTO_INCREMENT,      -- 음식점 로그 아이디
+    rest_id INT NOT NULL,                         -- 음식점 아이디 (외래키)
+    log_date DATETIME DEFAULT NOW(),              -- 기록일시
+    log_x DOUBLE NOT NULL,                        -- 사용자 경도
+    log_y DOUBLE NOT NULL,                        -- 사용자 위도
+    PRIMARY KEY (rest_log_id),
+    FOREIGN KEY (rest_id) REFERENCES rest(rest_id)
+);
+
+-- 사용자 추천 카테고리 로그 테이블
+CREATE TABLE log_random (
+    log_random_id INT NOT NULL AUTO_INCREMENT,    -- 추천 카테고리 로그 아이디
+    log_id INT NOT NULL,                          -- 사용자 로그 아이디 (외래키)
+    sub_id INT NOT NULL,                          -- 카테고리 아이디 (외래키)
+    PRIMARY KEY (log_random_id),
+    FOREIGN KEY (log_id) REFERENCES log(log_id),
+    FOREIGN KEY (sub_id) REFERENCES sub_category(sub_id)
+);
+
+-- 추천한 카테고리 테이블
+CREATE TABLE log_recommend (
+    log_recommend_id INT NOT NULL AUTO_INCREMENT, -- 추천한 카테고리 아이디
+    log_id INT NOT NULL,                          -- 사용자 로그 아이디 (외래키)
+    sub_id1 INT NOT NULL,                         -- 추천 카테고리 1 (외래키)
+    sub_id2 INT NOT NULL,                         -- 추천 카테고리 2 (외래키)
+    sub_id3 INT NOT NULL,                         -- 추천 카테고리 3 (외래키)
+    PRIMARY KEY (log_recommend_id),
+    FOREIGN KEY (log_id) REFERENCES log(log_id),
+    FOREIGN KEY (sub_id1) REFERENCES sub_category(sub_id),
+    FOREIGN KEY (sub_id2) REFERENCES sub_category(sub_id),
+    FOREIGN KEY (sub_id3) REFERENCES sub_category(sub_id)
+);

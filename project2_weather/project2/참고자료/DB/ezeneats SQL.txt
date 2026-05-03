@@ -1,0 +1,124 @@
+drop database ezeneats;
+create database ezeneats;
+use ezeneats;
+
+
+drop table sub_category;
+-- 음식 카테고리 테이블
+CREATE TABLE sub_category (
+    sub_id INT PRIMARY KEY AUTO_INCREMENT comment '카테고리 일련번호',
+    sub_name VARCHAR(255) NULL comment '카테고리 이름',
+    sub_sentence TEXT NULL comment '카테고리 문장',
+    sub_sentemb JSON NULL comment '카테고리 문장 벡터',
+    sub_keyword JSON NULL comment '카테고리 키워드',
+    sub_keyemb JSON NULL comment '카테고리 키워드 벡터'
+) comment = '음식 카테고리';
+
+
+drop table rest;
+-- 음식점 테이블
+CREATE TABLE rest (
+    rest_id INT PRIMARY KEY AUTO_INCREMENT comment '음식점 일련번호',
+    sub_id INT NOT NULL comment '카테고리 일련번호',
+    rest_name VARCHAR(255) NOT NULL comment '음식점 이름',
+    rest_x DOUBLE NOT NULL comment '음식점 경도',
+    rest_y DOUBLE NOT NULL comment '음식점 위도',
+    rest_dong VARCHAR(255) comment '법정동명',
+    rest_addr VARCHAR(255) comment '도로명주소',
+    rest_old VARCHAR(255) comment '지번',
+    review_count INT DEFAULT 0 comment '전체 리뷰 수',
+    rest_cdate DATETIME DEFAULT NOW() comment '등록일자',
+    rest_udate DATETIME comment '수정일자',
+    nplace_id INT comment '네이버 플레이스 id',
+    rest_display VARCHAR(2) DEFAULT 'Y' comment '노출여부',
+    FOREIGN KEY (sub_id) REFERENCES sub_category(sub_id)
+) comment = '음식점';
+
+ALTER TABLE rest
+ADD COLUMN rest_display VARCHAR(2) DEFAULT 'Y' COMMENT '노출여부';
+
+drop table review;
+-- 리뷰 테이블
+CREATE TABLE review (
+    review_id INT PRIMARY KEY AUTO_INCREMENT comment '리뷰 일련번호',
+    rest_id INT NOT NULL comment '음식점 일련번호',
+    review_content TEXT NOT NULL comment '리뷰 내용',
+    review_wdate DATE NOT NULL comment '리뷰 작성일',
+    review_tokens TEXT comment '리뷰 토큰',
+    review_emotion VARCHAR(2) comment '리뷰 감정(긍/부정)',
+    review_prob DOUBLE comment '감정 확신도',
+    FOREIGN KEY (rest_id) REFERENCES rest(rest_id)
+) comment = '리뷰';
+
+
+drop table log_table;
+-- 이용자 로그 테이블
+CREATE TABLE log_table (
+    log_id INT PRIMARY KEY AUTO_INCREMENT comment '로그 일련번호',
+    log_agreed VARCHAR(2) DEFAULT 'N' comment '위치정보 동의 여부( N, Y )',
+    log_query VARCHAR(255) comment '검색어',
+    log_user_ip VARCHAR(255) comment '사용자 IP',
+    log_x DOUBLE DEFAULT -3.14 comment '사용자 경도',
+    log_y DOUBLE DEFAULT -3.14 comment '사용자 위도',
+    log_date DATETIME DEFAULT NOW() comment '기록일시',
+    log_weather JSON NOT NULL comment '날씨 정보',
+    log_random INT comment '랜덤 선택 카테고리',
+    log_reco1 INT comment '추천 카테고리1',
+    log_reco2 INT comment '추천 카테고리2',
+    log_reco3 INT comment '추천 카테고리3'
+) comment = '이용자 로그';
+
+
+drop table sub_log;
+-- 이용자 카테고리 로그 테이블
+CREATE TABLE sub_log (
+    sub_log_id INT PRIMARY KEY AUTO_INCREMENT comment '카테고리 로그 id',
+    sub_id INT NOT NULL comment '카테고리 일련번호',
+    log_date DATETIME DEFAULT NOW() comment '기록일시',
+    log_x DOUBLE DEFAULT -3.14 NOT NULL comment '이용자 경도',
+    log_y DOUBLE DEFAULT -3.14 NOT NULL comment '이용자 위도',
+    log_weather JSON NOT NULL comment '날씨 정보',
+    FOREIGN KEY (sub_id) REFERENCES sub_category(sub_id)
+) comment = '카테고리 로그';
+
+
+
+drop table rest_log;
+-- 이용자 음식점 로그 테이블
+CREATE TABLE rest_log (
+    rest_log_id INT PRIMARY KEY AUTO_INCREMENT comment '음식점 로그 id',
+    rest_id INT NOT NULL comment '음식점 일련번호',
+    log_date DATETIME DEFAULT NOW() comment '기록일시',
+    log_x DOUBLE DEFAULT -3.14 NOT NULL comment '이용자 경도',
+    log_y DOUBLE DEFAULT -3.14 NOT NULL comment '이용자 위도',
+    log_weather JSON NOT NULL comment '날씨 정보',
+    FOREIGN KEY (rest_id) REFERENCES rest(rest_id)
+) comment = '음식점 로그';
+
+
+
+# 더미
+
+-- 이용자 추천 카테고리 로그 테이블
+CREATE TABLE log_random (
+    log_random_id INT NOT NULL AUTO_INCREMENT,    -- 추천 카테고리 로그 아이디
+    log_id INT NOT NULL,                          -- 사용자 로그 아이디 (외래키)
+    sub_id INT NOT NULL,                          -- 카테고리 아이디 (외래키)
+    PRIMARY KEY (log_random_id),
+    FOREIGN KEY (log_id) REFERENCES log(log_id),
+    FOREIGN KEY (sub_id) REFERENCES sub_category(sub_id)
+) comment = '음식점 로그';
+
+-- 추천한 카테고리 테이블
+CREATE TABLE log_recommend (
+    log_recommend_id INT NOT NULL AUTO_INCREMENT, -- 추천한 카테고리 아이디
+    log_id INT NOT NULL,                          -- 사용자 로그 아이디 (외래키)
+    sub_id1 INT NOT NULL,                         -- 추천 카테고리 1 (외래키)
+    sub_id2 INT NOT NULL,                         -- 추천 카테고리 2 (외래키)
+    sub_id3 INT NOT NULL,                         -- 추천 카테고리 3 (외래키)
+    PRIMARY KEY (log_recommend_id),
+    FOREIGN KEY (log_id) REFERENCES log(log_id),
+    FOREIGN KEY (sub_id1) REFERENCES sub_category(sub_id),
+    FOREIGN KEY (sub_id2) REFERENCES sub_category(sub_id),
+    FOREIGN KEY (sub_id3) REFERENCES sub_category(sub_id)
+) comment = '음식점 로그';
